@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Install Go ^1.18
+        uses: actions/setup-go@v3
+        with:
+          go-version: "^1.18.0"
+
+      - name: Check Go version
+        run: |
+          go version
+
+      - name: List Go package
+        run: |
+          GOPROXY=proxy.golang.org go list -m github.com/${{ github.repository }}@${{ github.event.release.tag_name }}
